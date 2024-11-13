@@ -219,6 +219,52 @@ def determina_configuratie_careu_ocifre(img, thresh, lines_horizontal, lines_ver
                 print("cifra")
                 plt.imshow(patch)
                 plt.show()
-                classified_number = classify_patch(patch, template_folder="/Users/dariadragomir/AI_siemens/Mathable/train/cifre_cropped/", threshold=0.8)
+                classified_number = classify_patch(patch, template_folder="/Users/dariadragomir/AI_siemens/Mathable/train/cifre/", threshold=0.8)
                 print(classified_number)
 determina_configuratie_careu_ocifre(poza_originala_cropped, poza_originala_cropped, lines_horizontal, lines_vertical, copie_i)
+'''
+result = careul ramas doar din casete fara margine
+copie_i = creez harta fara nicio piesa pe ea ( x2-> matrice )
+update copie_i pt fiecare mutare 
+determina_configuratie_careu_ocifre(result,result,lines_horizontal,lines_vertical, copie_i)
+
+-- creez copie_i = careul fara nicio piesa pe el pt reguli 
+--X gasesc valori de LY HY pt coordonate careu exterior 
+-- gasit coordonate careu interior 
+--X aplic wrap si perspective din extrage_careu() ca sa centreze careul interior
+--X gasit LY HY pt contrast bun intre piesele puse(albe) si backgroung(negru)
+--
+image=cv.imread('2_48.jpg')
+low_yellow = (0,119,176)
+high_yellow = (21, 255, 255)
+img_hsv = cv.cvtColor(image, cv.COLOR_BGR2HSV)
+mask_yellow_hsv = cv.inRange(img_hsv, low_yellow, high_yellow)
+image_m_blur = cv.medianBlur(image,1)
+image_g_blur = cv.GaussianBlur(image_m_blur, (0, 0), 1) 
+_, thresh = cv.threshold(image_g_blur, 30, 255, cv.THRESH_BINARY)
+
+-- cod pt determina_configuratie_careu_ocifre()
+--X fac dataset pt cifre (folder de cifre)
+--X tot in determina_configuratie_careu_ocifre() scriu functie clasificare cifra cu MatchTemplate din cv 
+
+-- calculez scor 
+'''
+
+'''
+def get_templates1(img,thresh,lines_horizontal,lines_vertical):
+    matrix = np.empty((15,15), dtype='str')
+    for i in range(len(lines_horizontal)-1):
+        for j in range(len(lines_vertical)-1):
+            y_min = lines_vertical[j][0][0]
+            y_max = lines_vertical[j + 1][1][0] 
+            x_min = lines_horizontal[i][0][1] 
+            x_max = lines_horizontal[i + 1][1][1] 
+            patch = thresh[x_min:x_max, y_min:y_max].copy()
+            patch_orig=img[x_min:x_max, y_min:y_max].copy()
+            #plt.imshow(patch_orig)
+            #plt.show()
+            cv.imwrite("templates/"+str(i)+"_"+str(j)+".jpg",patch_orig)
+            print(i)
+    return matrix
+
+'''
